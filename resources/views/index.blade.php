@@ -30,7 +30,7 @@
          <th>Action</th> 
     </tr>
    
-    @foreach($employee as $Employees)
+    @foreach ($employee as $Employees)
 
 <tr>
   
@@ -43,19 +43,41 @@
           
     
     <td><img src="{{asset('uploads/'.$Employees->img)  }}" style="height:100px"></td>
-    <td>
+    {{-- <td>
                 <a href="{{url('index')}}">Update</a>
-            </td>
+            </td> --}}
+            {{-- <td>
+                <form action="{{ route('employee.destroy', $Employees->id) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this employee?');">
+                        Delete
+                    </button>
+                </form>
+            </td> --}}
             <td>
-                <a href="#">Delete</a>
+                <div class="d-flex">
+                    <a href="{{url('update-employee?id='.$Employees->id)}}" onclick="warning('Do you want to edit?')" class="text-success">Update</a>
+                    <a href="{{url('delete-employee?id='.$Employees->id)}}" onclick="warning(,'Do you want to delete?')" class="text-danger">Delete</a>
+                </div>
             </td>
+        
    
 </tr>
 
-@endforeach
+   @endforeach
 
 </table>
 </form> 
+@if(session('success'))
+<script>
+   Swal.fire({
+   title: "Success!",
+   text: "{{session('success')}}",
+   icon: "success"
+   });
+</script>
+@endif
 
 </body>
 </html>

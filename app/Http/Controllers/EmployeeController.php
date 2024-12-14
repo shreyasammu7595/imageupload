@@ -8,28 +8,39 @@ use App\Models\Employee;
 
 class EmployeeController extends Controller
 {
-    public function employee(){
+    public function employee(Request $request){
+        if(isset($request->id)){
+            $update = Employee::find($request->id);
+        }else{
+            $update = '';
+        }
         $employee = Employee::all();
-        return view('index',compact('employee'));
+        return view('index',compact('employee','update'));
 
     }   
 
     public function submit(Request $request){
-                $employee = new Employee; 
+                if($request->id == ''){
+                    $employee = new Employee; 
+                    $message = 'Employee added successfully..';
+                }else{
+                    $employee = Employee::find($request->id); 
+                    $message = 'Employee updated successfully..';
+                }
                 if ($image = $request->file('img')) {
                     $destinationPath = 'uploads/';
                     $profileImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
                     $image->move($destinationPath, $profileImage);
+                    $employee->img= $profileImage;
                 }
                 $employee->name= $request->name;
                 $employee->email= $request->email;
                 $employee->number= $request->number;
                 $employee->dob= $request->dob;
-                $employee->img= $profileImage;
               
                 $employee->save();
             
-                return back()->with('Success','your form is submitted');       
+                return redirect('employee')->with('Success',$message);       
         }
         // public function destroy($id)
         // {
@@ -89,14 +100,12 @@ class EmployeeController extends Controller
 //     return redirect('employee')->with('success', ' updated successfully.');
 // }
 
-public function update(Request $request){
-    if(isset($request->id)){
-        $res = employee::where('id',$request->id)->first();
-    }else{
-        $res = '';
-    }
-    // $get = employee::latest()->paginate(10);
-    return view('index',compact('index'));
+public function update_status(Request $request){
+    $employee = Employee::find($request->id);
+    $employee->status = $request->status;
+    $employee->save();
+
+    return back()->with('success',' status updated successfully..');
 }
 
 }

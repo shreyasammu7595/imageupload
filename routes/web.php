@@ -9,4 +9,5 @@ Route::POST('submit',[EmployeeController::class, 'Submit']);
 // Route::delete('employee/{id}',[EmployeeController::class,'destroy'])->name('employee');
 // Route to delete an employee by ID
 Route::get('/delete-employee', [EmployeeController::class, 'Employees'])->name('delete-employee');
+Route::get('/update-status', [EmployeeController::class, 'update_status']);
 Route:: POST('/update-employee', [EmployeeController::class, 'update'])->name('update-employee');
